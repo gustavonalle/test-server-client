@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:infinispan:config:11.0 https://infinispan.org/schemas/infinispan-config-11.0.xsd urn:infinispan:server:11.0 https://infinispan.org/schemas/infinispan-server-11.0.xsd"
+            xmlns="urn:infinispan:config:11.0" xmlns:server="urn:infinispan:server:11.0">
+
+    <cache-container>
+        <transport stack="udp" cluster="local"></transport>
+        <serialization marshaller="org.infinispan.marshaller.kryo.KryoMarshaller"></serialization>
+    </cache-container>
+
+    <server xmlns="urn:infinispan:server:11.0">
+        <interfaces>
+            <interface name="public">
+                <inet-address value="${infinispan.bind.address:127.0.0.1}"/>
+            </interface>
+        </interfaces>
+
+        <socket-bindings default-interface="public" port-offset="${infinispan.socket.binding.port-offset:0}">
+            <socket-binding name="default" port="${infinispan.bind.port:11222}"/>
+        </socket-bindings>
+
+        <security>
+            <security-realms>
+                <security-realm name="local">
+                </security-realm>
+            </security-realms>
+        </security>
+
+
+        <endpoints socket-binding="default" security-realm="local">
+            <hotrod-connector name="hotrod"/>
+            <rest-connector name="rest"/>
+        </endpoints>
+    </server>
+</infinispan>

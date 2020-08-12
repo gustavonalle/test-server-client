@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="Infinispan" monitorInterval="60" shutdownHook="disable">
+    <Properties>
+        <Property name="path">${sys:infinispan.server.log.path}</Property>
+        <Property name="accessLogPattern">%X{address} %X{user} [%d{dd/MMM/yyyy:HH:mm:ss Z}] &quot;%X{method} %m %X{protocol}&quot; %X{status} %X{requestSize} %X{responseSize} %X{duration}%n</Property>
+    </Properties>
+    <Appenders>
+        <!-- Colored output on the console -->
+        <Console name="STDOUT">
+            <PatternLayout pattern="%highlight{%d{HH:mm:ss,SSS} %-5p (%t) [%c] %m%throwable}{INFO=normal, DEBUG=normal, TRACE=normal}%n"/>
+        </Console>
+
+        <!-- Rolling file -->
+        <RollingFile name="FILE" createOnDemand="true"
+                     fileName="${path}/server.log"
+                     filePattern="${path}/server.log.%d{yyyy-MM-dd}-%i">
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="100 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p (%t) [%c] %m%throwable%n"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="STDOUT" level="INFO"/>
+            <AppenderRef ref="FILE"/>
+        </Root>
+
+        <Logger name="com.arjuna" level="WARN"/>
+
+    </Loggers>
+</Configuration>
