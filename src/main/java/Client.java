@@ -13,6 +13,8 @@ public class Client {
             ConfigurationBuilder builder = new ConfigurationBuilder();
             builder.addServer().host("127.0.0.1").port(11222);
             builder.marshaller(new KryoMarshaller());
+            builder.keySizeEstimate(50);
+            builder.valueSizeEstimate(4096);
             RemoteCacheManager rcm = new RemoteCacheManager(builder.build());
 
             String cacheName = "test";
