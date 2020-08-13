@@ -51,7 +51,7 @@ public class KryoMarshaller extends AbstractMarshaller {
     @Override
     protected ByteBuffer objectToBuffer(Object obj, int estimatedSize) throws IOException, InterruptedException {
         return pool.run((kryo) -> {
-            try (Output output = new Output(new ExposedByteArrayOutputStream(estimatedSize), estimatedSize)) {
+            try (Output output = new Output(new ExposedByteArrayOutputStream())) {
                 kryo.writeClassAndObject(output, obj);
                 return ByteBufferImpl.create(output.toBytes());
             }
